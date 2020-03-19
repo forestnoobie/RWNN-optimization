@@ -1,0 +1,41 @@
+{
+    "NAME": "experiment_1",
+    "ARGS_TRAIN" : {
+        "data": "CIFAR10",
+        "num_classes" : 10,
+        
+        "graycode" : true,
+        
+        "input_dim" : 3,
+        "lr_mode": "cosine",
+        "warmup_mode": "linear",    
+        "base_lr": 0.2,
+        "momentum": 0.9, 
+        "weight_decay": 0.00005,
+        "print_freq": 100,
+        
+        "epochs": 5,
+        "batch_size": 80,
+        "workers": 16,
+        
+        "warmup_epochs": 0,
+        "warmup_lr": 0.0,
+        "targetlr": 0.0
+
+    },
+    
+    "TRAIN_FROM_LOGS": false,
+    "REAL_TRAIN_LOG_PATH": "/root/data/basic_model/logs/",
+    
+    "RANDOM_SEARCH": true,
+    
+    "DATA_PATH" : "/root/data/basic_model/data",
+    "RUN_CODE" : "New_main",
+    "NUM_GRAPH" : 128 ,
+
+    "POP_SIZE":20,
+    "NGEN":30,
+    "CXPB":0.0,
+    "MUTPB":0.0
+
+}

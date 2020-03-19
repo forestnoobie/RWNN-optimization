@@ -1,0 +1,39 @@
+{
+    "NAME": "full_train",
+    "ARGS_TRAIN" : {
+        "data": "CIFAR10",
+        "num_classes" : 10,
+        
+        "graycode" : true,
+        
+        "input_dim" : 3,
+        "lr_mode": "cosine",
+        "warmup_mode": "linear",    
+        "base_lr": 0.2,
+        "momentum": 0.9, 
+        "weight_decay": 0.00005,
+        "print_freq": 100,
+        
+        "epochs": 5,
+        "batch_size": 240,
+        "workers": 64,
+        
+        "warmup_epochs": 0,
+        "warmup_lr": 0.0,
+        "targetlr": 0.0
+
+    },
+    
+    "DATA_PATH" : "/root/data/basic_model/data",
+    "RUN_CODE" : "New_main",
+    "NUM_GRAPH" : 128,
+    
+    "EPOCH_WEIGHT": 10,
+    
+    "GA_DATA_PATH": "/root/data/basic_model/logs/__New_main_experiment_1_GA_30gen/",
+    "RS_DATA_PATH": "/root/data/basic_model/logs/__New_main_experiment_1_RandomSerach_30gen/",
+    
+    "GA_SAVE_PATH": "/root/data/basic_model/logs/Full_Training_191223/pareto_GA.pkl",
+    "RS_SAVE_PATH": "/root/data/basic_model/logs/Full_Training_191223/pareto_RS.pkl"
+
+}

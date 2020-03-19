@@ -1,0 +1,36 @@
+{
+    "NAME": "full_train",
+    "ARGS_TRAIN" : {
+        "data": "CIFAR10",
+        "num_classes" : 10,
+        
+        "graycode" : true,
+        
+        "input_dim" : 3,
+        "lr_mode": "cosine",
+        "warmup_mode": "linear",    
+        "base_lr": 0.05,
+        "momentum": 0.9,
+        "weight_decay": 3e-4,
+        "print_freq": 50,
+        
+        "epochs": 1,
+        "batch_size": 1536,
+        "workers": 64,
+        
+        "warmup_epochs": 0,
+        "warmup_lr": 0.0,
+        "targetlr": 0.0,
+        
+        "channels" : 78
+
+    },
+    
+    "DATA_PATH" : "/root/data/basic_model/data",
+    "RUN_CODE" : "New_main",
+    "NUM_GRAPH" : 128,
+    
+    "GA_DATA_PATH": "/root/data/basic_model/logs/_final_New_main_experiment_1_GA_27gen/",
+    "RS_DATA_PATH": "/root/data/basic_model/logs/__/"
+
+}
