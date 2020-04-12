@@ -98,20 +98,6 @@ class identity(nn.Module):
         return out
 
 
-class Triplet_unit(nn.Module):
-    def __init__(self, inplanes, outplanes, stride=1):
-        super(Triplet_unit, self).__init__()
-        self.relu = nn.ReLU()
-        self.conv = depthwise_separable_conv_3x3(inplanes, outplanes, stride)
-        self.bn = nn.BatchNorm2d(outplanes)
-
-    def forward(self, x):
-        out = self.relu(x)
-        out = self.conv(out)
-        out = self.bn(out)
-        return out
-
-
 def operation_dictionary():
     temp_dict = {}
     temp_dict[0] = conv2d_3x3  # nin, nout, kernel_size=3, stride=stride, padding=
