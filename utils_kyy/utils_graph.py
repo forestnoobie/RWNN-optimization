@@ -34,23 +34,25 @@ def get_graph_info(graph):
     input_nodes = []
     output_nodes = []
     Nodes = []
+    print(graph.number_of_nodes())
+
     for node in range(graph.number_of_nodes()):
         # node i 에 대해        
         tmp = list(graph.neighbors(node))
         tmp.sort()    # 오름차순 정렬
-    
-        # node type 정의    
-        type = -1    # input node도, output node도 아닌. 그래프의 중간에 매개자처럼 있는 중간 node.
-        if node < tmp[0]:
-            input_nodes.append(node)
-            type = 0    # id 가장 작은 노드보다 작으면, 이건 외부에서 input을 받는 노드. 즉 input node.
-        if node > tmp[-1]:
-            output_nodes.append(node)
-            type = 1    # id 가장 큰 노드보다 크면, 이건 외부로 output 내보내는 노드. 즉 output node.
-        
-        # dag로 변환 (자신의 id보다 작은 노드들과의 연결만 남기기)
-        # [type] 0: input node, 1: output node, -1: input도 output도 아닌, 그래프 중간에 매개자처럼 있는 중간 node
-        Nodes.append(Node(node, [n for n in tmp if n < node], type))    # DAG(Directed Acyclic Graph)로 변환
+        # node type 정의
+        if tmp :
+            type = -1    # input node도, output node도 아닌. 그래프의 중간에 매개자처럼 있는 중간 node.
+            if node < tmp[0]:
+                input_nodes.append(node)
+                type = 0    # id 가장 작은 노드보다 작으면, 이건 외부에서 input을 받는 노드. 즉 input node.
+            if node > tmp[-1]:
+                output_nodes.append(node)
+                type = 1    # id 가장 큰 노드보다 크면, 이건 외부로 output 내보내는 노드. 즉 output node.
+
+            # dag로 변환 (자신의 id보다 작은 노드들과의 연결만 남기기)
+            # [type] 0: input node, 1: output node, -1: input도 output도 아닌, 그래프 중간에 매개자처럼 있는 중간 node
+            Nodes.append(Node(node, [n for n in tmp if n < node], type))    # DAG(Directed Acyclic Graph)로 변환
     return Nodes, input_nodes, output_nodes
 
 
