@@ -17,8 +17,8 @@
         "print_freq": 100,
         
         "epochs": 1,
-        "batch_size": 100,
-        "workers": 64,
+        "batch_size": 24,
+        "workers": 12,
         
         "warmup_epochs": 0,
         "warmup_lr": 0.0,

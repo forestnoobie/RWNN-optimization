@@ -148,7 +148,6 @@ def get_graph_info(graph):
 def get_g_matrix(Nodes):
     nsize = len(Nodes)
     adj_mat = np.array([[7] * nsize for i in range(nsize)])
-    random.seed(1234)
 
     for n in Nodes:
         node_id = n[0]

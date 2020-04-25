@@ -95,10 +95,8 @@ class rwns_train:
         # 2. Evaluate the population (with an invalid fitness)
         ###################################
         invalid_ind = [ind for ind in pop]
-
         for idx, ind in enumerate(invalid_ind):
-            print(len(ind))
-            fitness, ind_model = evaluate_hr_full_train(ind, args_train=self.args_train,
+            fitness, ind_model = evaluate_hr_full_train(ind[0], args_train=self.args_train,
                                              data_path=self.data_path, log_file_name=self.log_file_name)
             ind.fitness.values = fitness
             GA_history_list.append([ind, fitness])
@@ -158,10 +156,9 @@ class rwns_train:
             GA_history_list = []
 
             invalid_ind = [ind for ind in offspring]
-            print("invalid",invalid_ind)
 
             for idx, ind in enumerate(invalid_ind):
-                fitness, ind_model = evaluate_hr_full_train(ind, args_train=self.args_train,
+                fitness, ind_model = evaluate_hr_full_train(ind[0], args_train=self.args_train,
                                                  stage_pool_path_list=self.stage_pool_path_list,
                                                  data_path=self.data_path, log_file_name=self.log_file_name)
                 # <= evaluate() returns  (-prec, flops), NN_model
