@@ -120,9 +120,7 @@ def get_graph_info(graph):
     visited[neigbors[0]] = True
 
     while q:
-        #      print("here",here)
         neigbors = Nodes[here][1]
-        #       print("neigbors",neigbors)
 
         for n in neigbors:
             if visited[n] == False:
@@ -133,7 +131,6 @@ def get_graph_info(graph):
         q = q[1:]
 
         if visited[0] == True:
-            #            print("Connected")
             connection_flag = True
             break
 
@@ -260,7 +257,7 @@ def cxhr(ind1, ind2):
     new_ind2 = []
 
 
-    one_len = ind1/3
+    one_len = len(ind1)//3
 
     for i in range(3):
         temp_ind1 = ind1[one_len*i : one_len* (i+1)]
@@ -290,24 +287,4 @@ def cxOnePoint(ind1, ind2):
 
     return ind1, ind2
 
-
-def cxgray(ind1, ind2, num_graph):
-    gray_len = len(str(grayCode(num_graph)))
-
-    ## gray_len : 한 개 gray code의 길이, 전체 //3
-    new_ind1 = []
-    new_ind2 = []
-
-    for i in range(3):
-        temp_ind1 = ind1[gray_len * i:gray_len * (i + 1)]
-        temp_ind2 = ind2[gray_len * i:gray_len * (i + 1)]
-        if random.random() < 0.7:
-            x1, x2 = cxOnePoint(temp_ind1, temp_ind2)
-            new_ind1.extend(x1)
-            new_ind2.extend(x2)
-        else:
-            new_ind1.extend(temp_ind1)
-            new_ind2.extend(temp_ind2)
-
-    return new_ind1, new_ind2
 

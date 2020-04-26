@@ -31,9 +31,7 @@ class double_unit(nn.Module):
 
     def forward(self, x):
         out = self.relu(x)
-        # print("Double RELU output",out.size())
         out = self.bn(out)
-        # print("Double BN output",out.size())
         return out
 
 
@@ -46,11 +44,8 @@ class Triplet_unit(nn.Module):
 
     def forward(self, x):
         out = self.relu(x)
-        # print("Triplet Relu output",out.size())
         out = self.conv(out)
-        # print("Triplet Conv output",out.size())
         out = self.bn(out)
-        # print("Triplet BN output",out.size())
         return out
 
 
@@ -66,8 +61,6 @@ class Node_OP(nn.Module):
         self.gmat = gmat
         self.Node = Node
 
-        # print("is it input {}, how many inputs {}".format(self.is_input_node,self.input_nums))
-        # get operation from g_matirx
         if self.input_nums >= 1:
             for in_idx in Node.inputs:
                 operation_idx = gmat[in_idx][self.id]
@@ -75,7 +68,6 @@ class Node_OP(nn.Module):
                 self.oplist.append(op(nin=outplanes, nout=outplanes, stride=1))  ## input node가 아닐 떄는 channel size 유지!!
 
         # input 개수가 1보다 크면, 여러 input을 합쳐야함.
-        # print("input nums",self.input_nums)
         if self.input_nums >= 1:
             self.mean_weight = nn.Parameter(torch.ones(self.input_nums))  # type: torch.nn.parameter.Parameter
             self.sigmoid = nn.Sigmoid()
@@ -88,35 +80,22 @@ class Node_OP(nn.Module):
     # [참고] nn.Sigmoid()(torch.ones(1)) = 0.7311
     # seoungwonpark source 에서는 torch.zeros()로 들어감. => 0.5
     def forward(self, *input):
-        # print("Node ID : {} input nums forward {} is it input node {}".format(self.id,self.input_nums,self.is_input_node))
-        # print("Operation list", self.oplist)
         if self.input_nums > 1 and self.is_input_node == False:
-            # print('='*10)
-            # print("Node ID {} Components mean_weight : {} Operation type : {} input size : {}".format(self.id, self.mean_weight[0].size(),
-            # self.oplist[0],input[0].size()))
             out = self.sigmoid(self.mean_weight[0]) * self.oplist[0](input[0])  ## input node가 아니라고 생각해도 됨!
-            # print("Node ID : {} Output : {}".format(self.id,out.size()))
             for i in range(1, self.input_nums):
-                # print("input index {}, input : {} Operation Type {}".format(i, input[i].size(),self.oplist[i]))
                 out = out + self.sigmoid(self.mean_weight[i]) * self.oplist[i](input[i])
-                # print("Input Node ID : {} Output : {}".format(id,out.size()))
 
-            # print("Multi input Node output",out)
         elif self.input_nums == 1 and self.is_input_node == False:
             out = self.sigmoid(self.mean_weight[0]) * self.oplist[0](input[0])  ## input node가 아니라고 생각해도 됨!
             # print("Components \n self.mean_weight : {} Operation : {} Sigmoid : {} input : {} ".format(self.mean_weight[0], self.oplist[0],self.sigmoid(self.mean_weight[0]),input[0].size()))
-
-            # print("node id : {} \n after sigmoid Output : {}".format(self.id,out.size()))
 
         else:
             out = input[0]
             # print("Node ID : {} is a input Node \n Output : {}".format(self.id,out))
 
-        # print("node id : {}, before conv Out put : {}".format(self.id,out))
         out = self.conv(out)
 
-        # print('='*50)
-        # print("node id : {}, Final Out put : {}".format(self.id,out))
+
         return out
 
 
@@ -149,15 +128,8 @@ class StageBlock(nn.Module):
                 # print("input size if id {}".format(id))
                 results[id] = self.nodeop[id](*[results[_id] for _id in node.inputs])
 
-                ## inspecting None
-                # print(self.nodeop[id](*[results[_id] for _id in node.inputs]))
-                # print("*** Starting id out : {}, ids in : {} , results : {}  node operation : {}".format(id,node.inputs,results,self.nodeop[id]))
-                # print('='*30)
-                # print("Is Input node :  {} , Result id : {} Result Output shape : {} nodeop : {} ".format(id in self.input_nodes,
-                #   id,results[id], self.nodeop[id]))
 
-        print("gmat value",self.gmat)
-        print("output_nodes value",self.output_nodes)
+
         result = results[self.output_nodes[0]]
         # output
         # graph's output_nodes의 output 들을 평균내기

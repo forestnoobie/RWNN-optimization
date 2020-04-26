@@ -54,7 +54,6 @@ class rwns_train:
         logging.info('[Start] Rwns_train class is initialized.')
         logging.info('Start to write log.')
 
-        self.num_graph = params['NUM_GRAPH']
 
         self.toolbox = self.create_toolbox()
 
@@ -94,9 +93,9 @@ class rwns_train:
         ###################################
         # 2. Evaluate the population (with an invalid fitness)
         ###################################
-        invalid_ind = [ind for ind in pop]
+        invalid_ind = [ind for ind in pop] ## 이 부분은 왜한건지 iterator를 list로 만들기 위해?
         for idx, ind in enumerate(invalid_ind):
-            fitness, ind_model = evaluate_hr_full_train(ind[0], args_train=self.args_train,
+            fitness, ind_model = evaluate_hr_full_train(ind, args_train=self.args_train,
                                              data_path=self.data_path, log_file_name=self.log_file_name)
             ind.fitness.values = fitness
             GA_history_list.append([ind, fitness])
@@ -147,24 +146,25 @@ class rwns_train:
                 self.toolbox.mutate(ind2, indpb=self.mutpb)
                 del ind1.fitness.values, ind2.fitness.values
 
+            print("population status", offspring)
+
             ##### 3.3. Evaluation
             # Evaluate the individuals with an invalid fitness
             print("\t Evaluation...")
             start_time = time.time()
-
             # fitness values (= accuracy, flops) 모음
             GA_history_list = []
 
             invalid_ind = [ind for ind in offspring]
 
             for idx, ind in enumerate(invalid_ind):
-                fitness, ind_model = evaluate_hr_full_train(ind[0], args_train=self.args_train,
-                                                 stage_pool_path_list=self.stage_pool_path_list,
+                fitness, ind_model = evaluate_hr_full_train(ind, args_train=self.args_train,
                                                  data_path=self.data_path, log_file_name=self.log_file_name)
                 # <= evaluate() returns  (-prec, flops), NN_model
 
                 ind.fitness.values = fitness
                 GA_history_list.append([ind, fitness])
+            print("population status after evaluation", invalid_ind)
 
             ## log 기록
             self.train_log[gen] = GA_history_list
@@ -176,6 +176,7 @@ class rwns_train:
 
             ##### Select the next generation population
             pop = self.toolbox.select(pop + offspring, self.pop_size)
+            print("population status after select", pop)
 
             gen_time = time.time() - start_gen
             print('\t [gen_time: %.3fs]' % gen_time, gen, 'th generation is finished.')

@@ -94,9 +94,8 @@ def create_toolbox_for_NSGA_RWNN_hr(args_train, data_path=None, log_file_name=No
     else :
         print("change hr to True")
 
-    ## HR 일 때는 WS로 initiat 하고 싶은데 이 부분 좀 생각이 필요할듯
-    toolbox.register('individual', tools.initRepeat,
-                     creator.Individual, toolbox.init_graph, n=1)
+    toolbox.register('individual', tools.initIterate,
+                     creator.Individual, toolbox.init_graph) ## init_graph라는 함수를 한번 반복한다?
 
     toolbox.register('population', tools.initRepeat,
                      list, toolbox.individual)  # n은 생략함. toolbox.population 함수를 뒤에서 실행할 때 넣어줌.
@@ -199,7 +198,6 @@ def evaluate_hr_full_train(individual, args_train, data_path, channels=109,
 
     # Need to divdie ind in to 3
     one_len = len(individual)//3
-    print("length of one individual",one_len)
     for i in range(3):
         ind = individual[i*one_len : (i+1)*one_len]
         gmat = ind2gmat(ind, args_train.nsize)
@@ -263,7 +261,7 @@ def evaluate_hr_full_train(individual, args_train, data_path, channels=109,
                 transforms.RandomCrop(32, padding=4),
                 transforms.RandomHorizontalFlip(),
                 transforms.ToTensor(),
-                #  Cutout(cutout_length),  # from nsga-net github
+                Cutout(cutout_length),  # from nsga-net github
                 transforms.Normalize(CIFAR_MEAN, CIFAR_STD)
             ])
 
