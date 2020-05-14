@@ -14,11 +14,11 @@
         "base_lr": 0.2,
         "momentum": 0.9, 
         "weight_decay": 0.00005,
-        "print_freq": 100,
+        "print_freq": 50,
         
-        "epochs": 1,
-        "batch_size": 24,
-        "workers": 12,
+        "epochs": 25,
+        "batch_size": 512,
+        "workers": 36,
         
         "warmup_epochs": 0,
         "warmup_lr": 0.0,
@@ -26,12 +26,12 @@
 
     },
     
-    "DATA_PATH" : "D:/data/",
+    "DATA_PATH" : "/root/data/main_model/data",
     "RUN_CODE" : "main_hr",
 
 
     
-    "POP_SIZE":4,
+    "POP_SIZE":40,
     "NGEN":30,
     "CXPB":0.5 ,
     "MUTPB":0.1,

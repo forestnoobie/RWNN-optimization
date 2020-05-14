@@ -226,7 +226,7 @@ def evaluate_hr_full_train(individual, args_train, data_path, channels=109,
 
     # 3) Prepare for train### 일단 꺼보자!
     # NN_model = nn.DataParallel(NN_model)  # for multi-GPU
-    # NN_model = nn.DataParallel(NN_model, device_ids=[0,1,2,3])
+    NN_model = nn.DataParallel(NN_model, device_ids=[0,1,2,3])
     # define loss function (criterion) and optimizer
     criterion = nn.CrossEntropyLoss().cuda()
 
@@ -290,7 +290,6 @@ def evaluate_hr_full_train(individual, args_train, data_path, channels=109,
     # Train
     ###########################
     niters = len(train_loader)
-    niters = 1
 
     lr_scheduler = LRScheduler(optimizer, niters,
                                args_train)  # (default) args.step = [30, 60, 90], args.decay_factor = 0.1, args.power = 2.0

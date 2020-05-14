@@ -33,8 +33,6 @@ class rwns_train:
         self.args_train = EasyDict(params['ARGS_TRAIN'])
         self.data_path = params['DATA_PATH']
         self.run_code = params['RUN_CODE']
-        self.stage_pool_path = '../graph_pool' + '/' + self.run_code + '_' + self.name + '/'
-        self.stage_pool_path_list = []
 
         self.log_path = '../logs/' + self.run_code + '_' + self.name + '/'
         # self.log_file_name : Initialize 부터 GA 진행상황 등 코드 전체에 대한 logging
@@ -42,10 +40,6 @@ class rwns_train:
         # self.train_log_file_name : fitness (= flops, val_accuracy). 즉 GA history 를 저장 후, 나중에 사용하기 위한 logging.
         self.train_log_file_name = self.log_path + 'train_logging.log'
 
-        if not os.path.exists(self.stage_pool_path):
-            os.makedirs(self.stage_pool_path)
-            for i in range(3):
-                os.makedirs(self.stage_pool_path_list[i])
 
         if not os.path.isdir(self.log_path):
             os.makedirs(self.log_path)
@@ -95,6 +89,7 @@ class rwns_train:
         ###################################
         invalid_ind = [ind for ind in pop] ## 이 부분은 왜한건지 iterator를 list로 만들기 위해?
         for idx, ind in enumerate(invalid_ind):
+            print("processing chromosome",idx)
             fitness, ind_model = evaluate_hr_full_train(ind, args_train=self.args_train,
                                              data_path=self.data_path, log_file_name=self.log_file_name)
             ind.fitness.values = fitness
@@ -146,7 +141,6 @@ class rwns_train:
                 self.toolbox.mutate(ind2, indpb=self.mutpb)
                 del ind1.fitness.values, ind2.fitness.values
 
-            print("population status", offspring)
 
             ##### 3.3. Evaluation
             # Evaluate the individuals with an invalid fitness
@@ -158,13 +152,13 @@ class rwns_train:
             invalid_ind = [ind for ind in offspring]
 
             for idx, ind in enumerate(invalid_ind):
+                print("processing chromosome",idx)
                 fitness, ind_model = evaluate_hr_full_train(ind, args_train=self.args_train,
                                                  data_path=self.data_path, log_file_name=self.log_file_name)
                 # <= evaluate() returns  (-prec, flops), NN_model
 
                 ind.fitness.values = fitness
                 GA_history_list.append([ind, fitness])
-            print("population status after evaluation", invalid_ind)
 
             ## log 기록
             self.train_log[gen] = GA_history_list
@@ -176,7 +170,6 @@ class rwns_train:
 
             ##### Select the next generation population
             pop = self.toolbox.select(pop + offspring, self.pop_size)
-            print("population status after select", pop)
 
             gen_time = time.time() - start_gen
             print('\t [gen_time: %.3fs]' % gen_time, gen, 'th generation is finished.')
