@@ -39,7 +39,11 @@ class rwns_train:
         self.log_file_name = self.log_path + 'logging.log'
         # self.train_log_file_name : fitness (= flops, val_accuracy). 즉 GA history 를 저장 후, 나중에 사용하기 위한 logging.
         self.train_log_file_name = self.log_path + 'train_logging.log'
+        self.checkpoint_path = '../checkpoints/' + self.name
+        
 
+        if not os.path.isdir(self.checkpoint_path):
+            os.makedirs(self.checkpoint_path)
 
         if not os.path.isdir(self.log_path):
             os.makedirs(self.log_path)
@@ -154,7 +158,8 @@ class rwns_train:
             for idx, ind in enumerate(invalid_ind):
                 print("processing chromosome",idx)
                 fitness, ind_model = evaluate_hr_full_train(ind, args_train=self.args_train,
-                                                 data_path=self.data_path, log_file_name=self.log_file_name)
+                                                 data_path=self.data_path,
+                                                            log_file_name=self.log_file_name, generation=gen ,idx=idx,save_model_path = self.checkpoint_path)
                 # <= evaluate() returns  (-prec, flops), NN_model
 
                 ind.fitness.values = fitness

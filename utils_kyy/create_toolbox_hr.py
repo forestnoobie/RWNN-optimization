@@ -191,7 +191,7 @@ def mutUniformInt_custom(individual, low, up, indpb):
 
 
 def evaluate_hr_full_train(individual, args_train, data_path, channels=109,
-                           log_file_name=None):  # individual
+                           log_file_name=None, generation=0,idx=0, save_model_path='../checkpoints'):  # individual
 
     graphs = []
     gmats = []
@@ -294,8 +294,12 @@ def evaluate_hr_full_train(individual, args_train, data_path, channels=109,
     lr_scheduler = LRScheduler(optimizer, niters,
                                args_train)  # (default) args.step = [30, 60, 90], args.decay_factor = 0.1, args.power = 2.0
     epoch_ = 0
-
+    count_patient = 0 
+    patient = args_train.patient 
+    
     for epoch in range(start_epoch, args_train.epochs):
+        
+        
         # train for one epoch
         train(train_loader, NN_model, criterion, optimizer, lr_scheduler, epoch, args_train.print_freq, log_file_name)
 
@@ -304,11 +308,28 @@ def evaluate_hr_full_train(individual, args_train, data_path, channels=109,
 
         # remember best prec@1 and save checkpoint
         #         is_best = prec1 > best_prec1
-        best_prec1 = max(prec1, best_prec1)
-
+        
+        if prec1 > best_prec1 :
+            best_prec1 = max(prec1, best_prec1)
+            count_patient = 0 
+        
+        count_patient += 1
+        
+        if patient <= count_patient : break
+        
         epoch_ = epoch
+        
+    # 05.14 save model
+    # model 이름 generation_idx_acc
+    
+    model_name = gen + '_' + idx +  '_' + str(round(best_prec1,2))
+    
+    torch.save({'epoch':epoch,
+                'model_state_dict': model.state_dict(),
+                'optimizer_state_dict':optimizer.state_dict()
+               }, os.path.join(save_model_path,model_name))
 
-    return (-best_prec1, flops), epoch_  # Min (-val_accuracy, flops) 이므로 val_accuracy(top1)에 - 붙여서 return
+    return (-best_prec1, params), epoch_  # Min (-val_accuracy, flops) 이므로 val_accuracy(top1)에 - 붙여서 return
 
 
 # [Reference] https://github.com/ianwhale/nsga-net/blob/master/misc/utils.py

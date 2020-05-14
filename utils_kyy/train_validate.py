@@ -73,10 +73,12 @@ def train(train_loader, model, criterion, optimizer, lr_scheduler, epoch, print_
                 epoch, i, len(train_loader), batch_time=batch_time,
                 loss=losses, top1=top1, top5=top5))
 
-        # for unit test
-        # if i == 2 :
-        #     print("Unit Testing for 2 steps")
-        #     break
+        #for unit test
+        if i == 2 :
+            print("="*30)
+            print("Unit Testing for 2 steps")
+            break
+             
         
 def validate(val_loader, model, criterion, epoch, log_file_name):
     

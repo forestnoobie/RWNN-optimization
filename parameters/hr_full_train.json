@@ -1,5 +1,5 @@
 {
-    "NAME": "hr_unit",
+    "NAME": "hr_full_train",
     "ARGS_TRAIN" : {
         "data": "CIFAR10",
         "num_classes" : 10,
@@ -16,14 +16,14 @@
         "weight_decay": 0.00005,
         "print_freq": 50,
         
-        "epochs": 25,
-        "batch_size": 512,
+        "epochs": 30,
+        "batch_size": 256,
         "workers": 36,
         
         "warmup_epochs": 0,
         "warmup_lr": 0.0,
-        "targetlr": 0.0
-
+        "targetlr": 0.0,
+        "patient" : 10
 
     },
     
@@ -32,7 +32,7 @@
 
 
     
-    "POP_SIZE":60,
+    "POP_SIZE":40,
     "NGEN":100,
     "CXPB":0.5 ,
     "MUTPB":0.1,
